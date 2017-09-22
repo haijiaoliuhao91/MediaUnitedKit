@@ -2,21 +2,20 @@
 
 MediaUnitedKit集成了自定义视频+图像采集、视频+图片保存到自定义相册、图片编辑【不规则裁剪、旋转、加框、黑白、撤销】、自定义图片选择器、音频的录制+播放【支持本地和网络音频播放】。
 
-![Screenshot](IMG_7614.PNG)
-![Screenshot](IMG_7621.PNG)
-![Screenshot](IMG_7622.PNG)
-![Screenshot](IMG_7623.PNG)
-![Screenshot](IMG_7624.PNG)
-![Screenshot](IMG_7625.PNG)
-![Screenshot](IMG_7636.PNG)
-![Screenshot](IMG_7637.PNG)
-![Screenshot](IMG_7638.PNG)
-![Screenshot](IMG_7640.PNG)
-![Screenshot](IMG_7641.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7621.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7622.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7623.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7624.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7625.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7636.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7637.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7638.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7640.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7641.PNG)
 
 
 ## 代码结构
-![Screenshot](IMG_7613.PNG)
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/IMG_7613.PNG)
 
 其实通过类名就可以一目了然，在这里简述一下，具体可以去看代码。
 
@@ -45,23 +44,28 @@ MediaUnitedKit集成了自定义视频+图像采集、视频+图片保存到自�
 ### 图片编辑
 
 **裁剪**
+
 `MMImageClipper`实现图片的不规则裁剪，我参考的是在code4app下载的，GitHub上的貌似更好一些：[链接](https://github.com/jberlana/JBCroppableView)。
 
 **旋转**
+
 旋转就是每次旋转90度，具体可以看代码吧。
 
 **加框**
 这个就是图片合成了，需要注意的是图片的形状是各种各样的，所以要针对所编辑图片的size对边框图片做拉伸处理，为防止边框变形，要选非边框位置的某一像素点拉伸，具体可以看代码。
 
 **黑白**
+
 使用强大的框架：[GPUImage](https://github.com/BradLarson/GPUImage)。使用方式详见`UIImage+Category`类下的`sketchImage`方法。
 
 **撤销**
+
 使用数据库存储，数据ID可代表顺序。
 
 ### 图库
+
 自定义的图片选择器[MMImagePicker](https://github.com/dexianyinjiu/MMImagePicker)，使用`AssetsLibrary`框架，集成了图片的预览和固定形状的裁剪。
 
 ## END
-有问题可以加我【QQ:1539901764】来沟通，要备注来源哦，如果这个工具对你有些帮助，麻烦给我一些鼓励，给我一个star、fork、watch。
+有问题可以联系我【QQ:1539901764 要备注来源哦】，如果这个工具对你有些帮助，麻烦给我一些鼓励，一个star、fork、watch。
 
