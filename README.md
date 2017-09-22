@@ -4,9 +4,8 @@ MediaUnitedKit集成了自定义【视频+图像】采集、【视频+图片】�
 
 ![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/capture.png)
 ![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/editor.png)
-![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/gallery.png)
 ![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/audio.png)
-
+![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/gallery.png)
 
 ## 代码结构
 ![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/framework.png)
@@ -41,23 +40,28 @@ MediaUnitedKit集成了自定义【视频+图像】采集、【视频+图片】�
 ### 图片编辑
 
 1、裁剪
+
 `MMImageClipper`实现图片的不规则裁剪，我参考的是在code4app下载的，GitHub上的貌似更好一些：[链接](https://github.com/jberlana/JBCroppableView)。
 
 2、旋转
+
 旋转就是每次旋转90度，具体可以看代码吧。
 
 3、加框
+
 这个就是图片合成了，需要注意的是图片的形状是各种各样的，所以要针对所编辑图片的size对边框图片做拉伸处理，为防止边框变形，要选非边框位置的某一像素点拉伸，具体可以看代码。
 
 4、黑白
+
 使用强大的框架：[GPUImage](https://github.com/BradLarson/GPUImage)。使用方式详见`UIImage+Category`类下的`sketchImage`方法。
 
 5、撤销
+
 使用数据库存储，数据ID可代表顺序。
 
 ### 图库
 
-自定义的图片选择器[MMImagePicker](https://github.com/dexianyinjiu/MMImagePicker)，使用`AssetsLibrary`框架，集成了图片的预览和固定形状的裁剪。
+自定义的图片选择器[MMImagePicker](https://github.com/dexianyinjiu/MMImagePicker)，使用`AssetsLibrary`框架，同时集成了图片的预览和固定形状的裁剪。
 
 ## END
 有问题可以联系我【QQ:1539901764 要备注来源哦】，如果这个工具对你有些帮助，麻烦给一个star、fork、watch。O(∩_∩)O谢谢
