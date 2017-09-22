@@ -35,11 +35,13 @@ MediaUnitedKit集成了自定义视频+图像采集、视频+图片保存到自�
 
 ### 视频
 
-`MediaCaptureController`同样使用`AVFoundation`框架。拍照和录制视频自由切换，支持对焦、双击缩放镜头、前后置摄像头切换、闪光灯设置以及支持屏幕旋转。采集的视频和图片通过代理回传，通过key值`UIImagePickerControllerMediaURL`获取视频路径，key值`UIImagePickerControllerOriginalImage`获取图片。视频的播放，GitHub上有很多，我在本项目中添加了[WMPlayer](https://github.com/zhengwenming/WMPlayer)，大家可以看一下。
+`MediaCaptureController`同样使用`AVFoundation`框架。拍照和录制视频自由切换，支持对焦、双击缩放镜头、前后置摄像头切换、闪光灯设置以及支持屏幕旋转。采集的视频和图片通过代理回传，通过key值`UIImagePickerControllerMediaURL`获取视频路径，key值`UIImagePickerControllerOriginalImage`获取图片。
 
 ```objc
 - (void)mediaCaptureController:(UIViewController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
 ```
+
+视频的播放，GitHub上有很多，我在本项目中添加了[WMPlayer](https://github.com/zhengwenming/WMPlayer)，大家可以看一下。
 
 ### 图片编辑
 
@@ -52,6 +54,7 @@ MediaUnitedKit集成了自定义视频+图像采集、视频+图片保存到自�
 旋转就是每次旋转90度，具体可以看代码吧。
 
 **加框**
+
 这个就是图片合成了，需要注意的是图片的形状是各种各样的，所以要针对所编辑图片的size对边框图片做拉伸处理，为防止边框变形，要选非边框位置的某一像素点拉伸，具体可以看代码。
 
 **黑白**
