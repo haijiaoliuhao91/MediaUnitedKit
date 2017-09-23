@@ -64,5 +64,5 @@ MediaUnitedKit集成了自定义【视频+图像】采集、【视频+图片】�
 自定义的图片选择器[MMImagePicker](https://github.com/dexianyinjiu/MMImagePicker)，使用`AssetsLibrary`框架，同时集成了图片的预览和固定形状的裁剪。
 
 ## END
-有问题可以联系我【QQ:1539901764 要备注来源哦】，如果这个工具对你有些帮助，麻烦给一个star、fork、watch。O(∩_∩)O谢谢
+有问题可以联系我【QQ:1539901764 要备注来源哦】，如果这个工具对你有些帮助，请给我一个star、fork、watch。O(∩_∩)O谢谢
 
