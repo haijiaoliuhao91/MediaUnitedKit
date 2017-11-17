@@ -2,7 +2,7 @@
 //  MMImageCropController.m
 //  MMImagePicker
 //
-//  Created by LEA on 2017/6/14.
+//  Created by LEA on 2017/3/2.
 //  Copyright © 2017年 LEA. All rights reserved.
 //
 
@@ -11,19 +11,19 @@
 
 @interface MMImageCropController ()
 
-//图片显示视图
+// 图片显示视图
 @property (nonatomic,strong) UIImageView *imageView;
-//蒙版
+// 蒙版
 @property (nonatomic,strong) UIView *overlayView;
-//裁剪frame
+// 裁剪frame
 @property (nonatomic, assign) CGRect cropFrame;
-//记录frame
+// 记录frame
 @property (nonatomic, assign) CGRect oldFrame;
-//最大frame
+// 最大frame
 @property (nonatomic, assign) CGRect largeFrame;
-//最终frame
+// 最终frame
 @property (nonatomic, assign) CGRect latestFrame;
-//比例
+// 比例
 @property (nonatomic, assign) CGFloat limitRatio;
 
 @end

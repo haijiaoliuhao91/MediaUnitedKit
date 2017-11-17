@@ -15,7 +15,7 @@
 {
     [super layoutSubviews];
     [self.imageView setOrigin:CGPointMake(0, 0)];
-    [self.textLabel setLeft:self.imageView.right+10];
+    [self.textLabel setLeft:self.imageView.right + 10];
     [self setSeparatorInset:UIEdgeInsetsMake(0, self.imageView.width, 0, 0)];
 }
 

@@ -10,11 +10,11 @@
 
 @interface MMBarButtonItem : UIBarButtonItem
 
-//图片
+// 图片
 @property (nonatomic, strong) UIImage *customImage;
-//文本
+// 文本
 @property (nonatomic, strong) NSString *customTitle;
-//文本颜色
+// 文本颜色
 @property (nonatomic, strong) UIColor *titleColor;
 
 - (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action;

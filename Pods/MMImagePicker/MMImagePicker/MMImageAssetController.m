@@ -1,12 +1,12 @@
 //
-//  MMAssetCollectionController.m
+//  MMImageAssetController.m
 //  MMImagePicker
 //
-//  Created by LEA on 2017/6/14.
+//  Created by LEA on 2017/3/2.
 //  Copyright © 2017年 LEA. All rights reserved.
 //
 
-#import "MMAssetCollectionController.h"
+#import "MMImageAssetController.h"
 #import "MMImagePreviewController.h"
 #import "MMImageCropController.h"
 #import "MMImagePickerComponent.h"
@@ -17,10 +17,10 @@
 
 @end
 
-//#### MMAssetCollectionController
+//#### MMImageAssetController
 static NSString *const CellIdentifier = @"MMPhotoAlbumCell";
 
-@interface MMAssetCollectionController ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface MMImageAssetController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (nonatomic,strong) ALAssetsLibrary *library;
 @property (nonatomic,strong) UICollectionView *collectionView;
@@ -33,21 +33,25 @@ static NSString *const CellIdentifier = @"MMPhotoAlbumCell";
 @property (nonatomic,strong) UIButton *finishBtn;
 @property (nonatomic,strong) UILabel *numberLab;
 
-//是否回传原图[可用于控制图片压系数]
+// 是否回传原图[可用于控制图片压系数]
 @property (nonatomic, assign) BOOL isOrigin;
 
 @end
 
-@implementation MMAssetCollectionController
+@implementation MMImageAssetController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"选取照片";
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = [[MMBarButtonItem alloc] initWithImage:[UIImage imageNamed:MMImagePickerSrcName(@"mmphoto_back")] target:self action:@selector(leftBarItemAction)];
     self.navigationItem.rightBarButtonItem = [[MMBarButtonItem alloc] initWithTitle:@"取消" target:self action:@selector(rightBarItemAction)];
-
+    
+    // 标题
+    NSString *groupPropertyName = [self.assetGroup valueForProperty:ALAssetsGroupPropertyName];
+    self.title = groupPropertyName;
+    
+    // 初始化
     _isOrigin = NO;
     if (!_mainColor) {
         _mainColor = kMainColor;
@@ -62,7 +66,7 @@ static NSString *const CellIdentifier = @"MMPhotoAlbumCell";
     }
     [self getPhotoAlbum];
     
-    //是否显示原图选项
+    // 是否显示原图选项
     _originBtn.hidden = !self.showOriginImageOption;
 }
 
@@ -113,14 +117,14 @@ static NSString *const CellIdentifier = @"MMPhotoAlbumCell";
         _bottomView.userInteractionEnabled = NO;
         _bottomView.alpha = 0.5;
         
-        //上边框
+        // 上边框
         CALayer *layer = [CALayer layer];
         layer.frame = CGRectMake(0, 0, _bottomView.width, 0.5);
         layer.backgroundColor = [[UIColor lightGrayColor] CGColor];
         [_bottomView.layer addSublayer:layer];
-        
-        //子视图
-        _previewBtn = [[UIButton alloc] initWithFrame:CGRectMake(10, 0, kBottomHeight, kBottomHeight)];
+    
+        // 预览
+        _previewBtn = [[UIButton alloc] initWithFrame:CGRectMake(10, 0, 50, kBottomHeight)];
         _previewBtn.tag = 100;
         [_previewBtn.titleLabel setFont:[UIFont systemFontOfSize:16.0]];
         [_previewBtn setTitle:@"预览" forState:UIControlStateNormal];
@@ -128,12 +132,14 @@ static NSString *const CellIdentifier = @"MMPhotoAlbumCell";
         [_previewBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomView addSubview:_previewBtn];
         
-        _originBtn = [[UIButton alloc] initWithFrame:CGRectMake(_previewBtn.right+10, 0, 80, kBottomHeight)];
+        // 原图
+        _originBtn = [[UIButton alloc] initWithFrame:CGRectMake(_previewBtn.right+10, 0, 90, kBottomHeight)];
         _originBtn.tag = 101;
         [_originBtn.titleLabel setFont:[UIFont systemFontOfSize:16.0]];
         [_originBtn setTitle:@"原图" forState:UIControlStateNormal];
         [_originBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_originBtn setImageEdgeInsets:UIEdgeInsetsMake(12, 0, 12, 60)];
+        [_originBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+        [_originBtn setImageEdgeInsets:UIEdgeInsetsMake(12, 0, 12, 70)];
         [_originBtn setImage:[UIImage imageNamed:MMImagePickerSrcName(@"mmphoto_mark")] forState:UIControlStateNormal];
         [_originBtn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
         [_originBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -379,7 +385,7 @@ static NSString *const CellIdentifier = @"MMPhotoAlbumCell";
     
     //## 提醒
     if (([self.selectedAssetArray count] == _maximumNumberOfImage) && !mmAsset.isSelected) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"您最多可以添加%ld张图片！",(long)_maximumNumberOfImage]
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"最多可以添加%ld张图片",(long)_maximumNumberOfImage]
                                                         message:nil
                                                        delegate:nil
                                               cancelButtonTitle:@"知道了"

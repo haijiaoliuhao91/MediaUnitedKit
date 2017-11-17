@@ -64,17 +64,17 @@
 
 - (UIImage *)imageAddBorderByIndex:(NSInteger)index
 {
-    //边框图片
+    // 边框图片
     UIImage *borderImage = [UIImage imageNamed:[NSString stringWithFormat:@"border_%ld",(long)index]];
-    //对中间点像素拉伸
+    // 对中间点像素拉伸
     borderImage = [borderImage stretchableImageWithLeftCapWidth:floorf(borderImage.size.width/2) topCapHeight:floorf(borderImage.size.height/2)];
-    //合成
+    // 合成
     UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
     [borderImage drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
-    //刨去边框的宽度
+    // 刨去边框的宽度
     CGFloat margin  = 40;
     [self drawInRect:CGRectMake(margin, margin, self.size.width-2*margin, self.size.height-2*margin)];
-    //输出
+    // 输出
     UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return resultImage;

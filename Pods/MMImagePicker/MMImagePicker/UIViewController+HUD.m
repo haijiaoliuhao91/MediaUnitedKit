@@ -28,11 +28,11 @@ static char *hudKey = "hudKey" ;
 
 - (void)showHUD:(NSString *)title
 {
-    self.hud.color = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+    self.hud.color = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
     self.hud.customView = nil;
     self.hud.dimBackground = NO;
     self.hud.labelText = title;
-    self.hud.cornerRadius = 6.0f;
+    self.hud.cornerRadius = 4.0f;
     self.hud.mode = MBProgressHUDModeIndeterminate;
     self.hud.alpha = 1.0f;
 }

@@ -18,12 +18,12 @@ MediaUnitedKit集成了自定义【视频+图像】采集、【视频+图片】�
 使用方式就比较简单了：
 
 ```objc
-    NSURL *mp3URL = [NSURL fileURLWithPath:@"本地路径"];
-    NSURL *mp3URL = [NSURL URLWithString:@"网络路径"];
-    //播放器
-    AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:mp3URL];
-    AVPlayer *audioPlayer = [[AVPlayer alloc] initWithPlayerItem:playerItem];
-    [audioPlayer play];
+NSURL *mp3URL = [NSURL fileURLWithPath:@"本地路径"];
+NSURL *mp3URL = [NSURL URLWithString:@"网络路径"];
+//播放器
+AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:mp3URL];
+AVPlayer *audioPlayer = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+[audioPlayer play];
 ```
 
 ### 视频
@@ -45,15 +45,78 @@ MediaUnitedKit集成了自定义【视频+图像】采集、【视频+图片】�
 
 2、旋转
 
-旋转就是每次旋转90度，具体可以看代码吧。
+旋转就是每次旋转90度，这里需要注意一点是，需要把角度转化成弧度：
+
+```
+//由角度转换弧度
+#define kDegreesToRadian(x)         (M_PI * (x) / 180.0)
+```
+
+具体代码实现：
+
+```
+- (UIImage *)imageRotatedByRadians:(CGFloat)radians
+{
+    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.size.width, self.size.height)];
+    CGAffineTransform t = CGAffineTransformMakeRotation(radians);
+    rotatedViewBox.transform = t;
+    CGSize rotatedSize = rotatedViewBox.frame.size;
+    
+    UIGraphicsBeginImageContext(rotatedSize);
+    CGContextRef bitmap = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+    CGContextRotateCTM(bitmap, radians);
+    CGContextScaleCTM(bitmap, 1.0, -1.0);
+    CGContextDrawImage(bitmap, CGRectMake(-self.size.width / 2, -self.size.height / 2, self.size.width, self.size.height), [self CGImage]);
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+```
 
 3、加框
 
-这个就是图片合成了，需要注意的是图片的形状是各种各样的，所以要针对所编辑图片的size对边框图片做拉伸处理，为防止边框变形，要选非边框位置的某一像素点拉伸，具体可以看代码。
+这个就是图片合成了，需要注意的是图片的形状是各种各样的，所以要针对所编辑图片的size对边框图片做拉伸处理，为防止边框变形，要选非边框位置的某一像素点拉伸，具体试下入下：
+
+
+```
+- (UIImage *)imageAddBorderByIndex:(NSInteger)index
+{
+    // 边框图片
+    UIImage *borderImage = [UIImage imageNamed:[NSString stringWithFormat:@"border_%ld",(long)index]];
+    // 对中间点像素拉伸
+    borderImage = [borderImage stretchableImageWithLeftCapWidth:floorf(borderImage.size.width/2) topCapHeight:floorf(borderImage.size.height/2)];
+    // 合成
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+    [borderImage drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
+    // 刨去边框的宽度
+    CGFloat margin  = 40;
+    [self drawInRect:CGRectMake(margin, margin, self.size.width-2*margin, self.size.height-2*margin)];
+    // 输出
+    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultImage;
+}
+```
 
 4、黑白
 
 使用强大的框架：[GPUImage](https://github.com/BradLarson/GPUImage)。使用方式详见`UIImage+Category`类下的`sketchImage`方法。
+
+```
+- (UIImage *)sketchImage
+{
+    UIImage *image = [Utility fixOrientation:self];
+    GPUImageSketchFilter *filter = [[GPUImageSketchFilter alloc] init];
+    [filter forceProcessingAtSize:image.size];
+    GPUImagePicture *pic = [[GPUImagePicture alloc] initWithImage:image];
+    [pic addTarget:filter];
+    [pic processImage];
+    [filter useNextFrameForImageCapture];
+    UIImage *outImage = [filter imageFromCurrentFramebufferWithOrientation:UIImageOrientationUp];
+    return outImage;
+}
+```
 
 5、撤销
 

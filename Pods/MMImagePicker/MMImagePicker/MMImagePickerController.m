@@ -6,12 +6,13 @@
 //  Copyright © 2017年 LEA. All rights reserved.
 //
 
-#import "MMImagePickerController.h"
-#import "MMAssetCollectionController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "MMImagePickerController.h"
+#import "MMImageAssetController.h"
+#import "UIViewController+HUD.h"
 #import "MMAlbumCell.h"
 
-@interface MMImagePickerController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MMImagePickerController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray<ALAssetsGroup *> *assetGroups;
@@ -31,20 +32,21 @@
     
     self.assetGroups = [[NSMutableArray alloc] init];
     
-    //获取系统相册列表
+    // 获取系统相册列表
     [self showHUD:@"图库加载中"];
     self.library = [[ALAssetsLibrary alloc] init];
     
     __weak typeof(self) weakSelf = self;
     [self.library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        //为空时，枚举完成
+        // 为空时，枚举完成
         if (!group) {
             [weakSelf hideHUD];
             [weakSelf.tableView reloadData];
             [weakSelf pushImagePickerByAssetGroup:[weakSelf.assetGroups objectAtIndex:0] animated:NO];
             return ;
         }
-        //剔除空相册
+     
+        // 剔除空相册
         NSInteger count = [group numberOfAssets];
         if (count) {
             NSUInteger nType = [[group valueForProperty:ALAssetsGroupPropertyType] intValue];
@@ -61,12 +63,13 @@
         if (author == ALAuthorizationStatusRestricted || author == ALAuthorizationStatusDenied){
             UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:nil
                                                                 message:@"请开启相册访问权限"
-                                                               delegate:nil
+                                                               delegate:self
                                                       cancelButtonTitle:nil
-                                                      otherButtonTitles:@"确定",nil];
+                                                      otherButtonTitles:@"知道了",nil];
             [alterView show];
         }
     }];
+    
 }
 
 #pragma mark - getter
@@ -111,6 +114,11 @@
     return 0.1f;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return nil;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"MMAlbumCell";
@@ -120,16 +128,19 @@
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
-    
+    cell.textLabel.textColor = [UIColor grayColor];
+
     ALAssetsGroup *assetGroup = [self.assetGroups objectAtIndex:indexPath.row];
     NSString *groupPropertyName = [assetGroup valueForProperty:ALAssetsGroupPropertyName];
-    NSUInteger nType = [[assetGroup valueForProperty:ALAssetsGroupPropertyType] intValue];
-    if (nType == ALAssetsGroupSavedPhotos) {
-        groupPropertyName = @"相机胶卷";
-    }
     NSInteger count = [assetGroup numberOfAssets];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%ld)",groupPropertyName, (long)count];
+    // 封面
     cell.imageView.image = [UIImage imageWithCGImage:[assetGroup posterImage]];
+    // 数量
+    NSString *text = [NSString stringWithFormat:@"%@ (%ld)",groupPropertyName, (long)count];
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0,[groupPropertyName length])];
+    [attributedText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:17.0] range:NSMakeRange(0,[groupPropertyName length])];
+    cell.textLabel.attributedText = attributedText;
     return cell;
 }
 
@@ -146,17 +157,17 @@
 #pragma mark - 跳转
 - (void)pushImagePickerByAssetGroup:(ALAssetsGroup *)assetGroup animated:(BOOL)animated
 {
-    MMAssetCollectionController *imagePicker = [[MMAssetCollectionController alloc] init];
-    imagePicker.assetGroup = assetGroup;
-    imagePicker.mainColor = self.mainColor;
-    imagePicker.maximumNumberOfImage = self.maximumNumberOfImage;
-    imagePicker.showOriginImageOption = self.showOriginImageOption;
-    imagePicker.singleImageOption = self.singleImageOption;
-    imagePicker.cropImageOption = self.cropImageOption;
-    imagePicker.imageCropSize = self.imageCropSize;
-
+    MMImageAssetController *controller = [[MMImageAssetController alloc] init];
+    controller.assetGroup = assetGroup;
+    controller.mainColor = self.mainColor;
+    controller.maximumNumberOfImage = self.maximumNumberOfImage;
+    controller.showOriginImageOption = self.showOriginImageOption;
+    controller.singleImageOption = self.singleImageOption;
+    controller.cropImageOption = self.cropImageOption;
+    controller.imageCropSize = self.imageCropSize;
+    
     __weak typeof(self) weakSelf = self;
-    [imagePicker setCompletion:^(NSArray *info, BOOL isOrigin, BOOL isCancel){
+    [controller setCompletion:^(NSArray *info, BOOL isOrigin, BOOL isCancel){
         weakSelf.isOrigin = isOrigin;
         if (isCancel) { //取消
             if ([weakSelf.delegate respondsToSelector:@selector(mmImagePickerControllerDidCancel:)]) {
@@ -170,7 +181,13 @@
             }
         }
     }];
-    [self.navigationController pushViewController:imagePicker animated:animated];
+    [self.navigationController pushViewController:controller animated:animated];
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self barButtonItemAction:nil];
 }
 
 #pragma mark -

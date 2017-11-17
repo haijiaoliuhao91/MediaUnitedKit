@@ -50,7 +50,7 @@
 
 
 static const CGFloat kPadding = 10.f;
-static const CGFloat kLabelFontSize = 16.f;
+static const CGFloat kLabelFontSize = 15.f;
 static const CGFloat kDetailsLabelFontSize = 12.f;
 
 
@@ -172,9 +172,9 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 		self.detailsLabelText = nil;
 		self.opacity = 0.8f;
 		self.color = nil;
-		self.labelFont = [UIFont boldSystemFontOfSize:kLabelFontSize];
+		self.labelFont = [UIFont systemFontOfSize:kLabelFontSize];
 		self.labelColor = [UIColor whiteColor];
-		self.detailsLabelFont = [UIFont boldSystemFontOfSize:kDetailsLabelFontSize];
+		self.detailsLabelFont = [UIFont systemFontOfSize:kDetailsLabelFontSize];
 		self.detailsLabelColor = [UIColor whiteColor];
 		self.activityIndicatorColor = [UIColor whiteColor];
 		self.xOffset = 0.0f;
@@ -461,6 +461,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	label.textColor = self.labelColor;
 	label.font = self.labelFont;
 	label.text = self.labelText;
+    label.numberOfLines = 0;
 	[self addSubview:label];
 	
 	detailsLabel = [[UILabel alloc] initWithFrame:self.bounds];
@@ -523,8 +524,8 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 }
 
 #pragma mark - Layout
-
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
 	[super layoutSubviews];
 	
 	// Entirely cover the parent view
@@ -535,7 +536,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	CGRect bounds = self.bounds;
 	
 	// Determine the total widt and height needed
-	CGFloat maxWidth = bounds.size.width - 4 * margin;
+	CGFloat maxWidth = bounds.size.width/2.f;
 	CGSize totalSize = CGSizeZero;
 	
 	CGRect indicatorF = indicator.bounds;
@@ -543,7 +544,12 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	totalSize.width = MAX(totalSize.width, indicatorF.size.width);
 	totalSize.height += indicatorF.size.height;
 	
-	CGSize labelSize = MB_TEXTSIZE(label.text, label.font);
+    NSDictionary *dict = @{NSFontAttributeName: label.font};
+    CGSize labelSize = [label.text boundingRectWithSize:CGSizeMake(maxWidth, MAXFLOAT)
+                                                options:NSStringDrawingUsesLineFragmentOrigin
+                                             attributes:dict
+                                                context:nil].size;
+    
 	labelSize.width = MIN(labelSize.width, maxWidth);
 	totalSize.width = MAX(totalSize.width, labelSize.width);
 	totalSize.height += labelSize.height;
@@ -606,7 +612,12 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	if (totalSize.height < minSize.height) {
 		totalSize.height = minSize.height;
 	}
-	
+    if (totalSize.width < totalSize.height) {
+        totalSize.width = totalSize.height;
+    }
+    if (totalSize.width > maxWidth) {
+        totalSize.width = maxWidth;
+    }
 	size = totalSize;
 }
 
