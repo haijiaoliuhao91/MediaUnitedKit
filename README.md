@@ -2,13 +2,13 @@
 
 MediaUnitedKit集成了自定义【视频+图像】采集、【视频+图片】保存到自定义相册、图片编辑【不规则裁剪、旋转、加框、黑白、撤销】、自定义图片选择器、音频的录制+播放【支持本地和网络音频播放】。
 
-![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/capture.png)
-![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/editor.png)
-![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/audio.png)
-![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/gallery.png)
+![Screenshot](https://github.com/CheeryLau/MediaUnitedKit/blob/master/Screenshot/capture.png)
+![Screenshot](https://github.com/CheeryLau/MediaUnitedKit/blob/master/Screenshot/editor.png)
+![Screenshot](https://github.com/CheeryLau/MediaUnitedKit/blob/master/Screenshot/audio.png)
+![Screenshot](https://github.com/CheeryLau/MediaUnitedKit/blob/master/Screenshot/gallery.png)
 
 ## 代码结构
-![Screenshot](https://github.com/dexianyinjiu/MediaUnitedKit/blob/master/Screenshot/framework.png)
+![Screenshot](https://github.com/CheeryLau/MediaUnitedKit/blob/master/Screenshot/framework.png)
 
 其实通过类名就可以一目了然，在这里简述一下，具体可以去看代码。
 
@@ -124,7 +124,7 @@ AVPlayer *audioPlayer = [[AVPlayer alloc] initWithPlayerItem:playerItem];
 
 ### 图库
 
-自定义的图片选择器[MMImagePicker](https://github.com/dexianyinjiu/MMImagePicker)，使用`AssetsLibrary`框架，同时集成了图片的预览和固定形状的裁剪。
+自定义的图片选择器[MMImagePicker](https://github.com/CheeryLau/MMImagePicker)，使用`AssetsLibrary`框架，同时集成了图片的预览和固定形状的裁剪。
 
 ## END
 
